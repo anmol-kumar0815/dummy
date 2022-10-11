@@ -3,4 +3,4 @@ const CATEGORIES_OPTIONS = categories.map(category => ({
     value: category.id,
   }));
 
-hello there are some changes in dummy branch;
+hello there are some changes in dummy branch
