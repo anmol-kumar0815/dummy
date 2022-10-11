@@ -1,0 +1,23 @@
+# frozen_string_literal: true
+
+class CategoriesController < ApplicationController
+  skip_before_action :verify_authenticity_token
+  def index
+    categoryWithTheirActiclesCount = Category.left_joins(:articles)
+      .select("categories.id, categories.name, COUNT(articles.category_id)")
+      .group("categories.id").order("COUNT(categories.id) DESC")
+    render status: :ok, json: { categories: categoryWithTheirActiclesCount }
+  end
+
+  def create
+    category = Category.new(category_params)
+    category.save!
+    render status: :ok, json: { notice: "Category was successfully created" }
+  end
+
+  private
+
+    def category_params
+      params.require(:category).permit(:name)
+    end
+end

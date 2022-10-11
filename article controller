@@ -1,0 +1,22 @@
+# frozen_string_literal: true
+
+class ArticlesController < ApplicationController
+  skip_before_action :verify_authenticity_token
+  def index
+    allArticles = Category.joins(:articles)
+      .select("articles.id, articles.title, articles.updated_at, articles.author, categories.name, articles.status")
+    render status: :ok, json: { articles: allArticles }
+  end
+
+  def create
+    article = Article.new(article_params)
+    article.save!
+    render status: :ok, json: { notice: "Article was successfully created" }
+  end
+
+  private
+
+    def article_params
+      params.require(:article).permit(:title, :author, :status, :category_id, :body)
+    end
+end
